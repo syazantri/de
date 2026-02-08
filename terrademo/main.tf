@@ -8,14 +8,15 @@ terraform {
 }
 
 provider "google" {
-  project = "terraform-project-484110"
-  region  = "asia-southeast2"
+  credentials = file(var.credentials)
+  project     = var.project
+  region      = var.region
 }
 
 #resource {what kind of resource} {name of the resource (local variable)}
 resource "google_storage_bucket" "demo-bucket" {
-  name          = "demo-bucket-sasa"
-  location      = "ASIA-SOUTHEAST2"
+  name          = var.gcs_bucket_name
+  location      = var.location
   force_destroy = true
 
 
@@ -28,4 +29,9 @@ resource "google_storage_bucket" "demo-bucket" {
       type = "AbortIncompleteMultipartUpload"
     }
   }
+}
+
+resource "google_bigquery_dataset" "demo_dataset" {
+  dataset_id = var.bq_dataset_name
+  location   = var.location
 }
